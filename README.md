@@ -7,6 +7,12 @@ A production-ready **RAG chatbot web application** for postgraduate (Thạc sĩ)
 Built with **Next.js (App Router) + FastAPI + PostgreSQL + Qdrant**, orchestrated with **Docker Compose**.
 
 ---
+## Review
+<img width="1352" height="628" alt="image" src="https://github.com/user-attachments/assets/577c8b22-28eb-44ae-850c-cc2c39f6c79a" />
+<img width="1356" height="284" alt="image" src="https://github.com/user-attachments/assets/09f604aa-f36a-4856-8734-de08f1c25461" />
+
+---
+
 
 ## Features
 
@@ -278,7 +284,5 @@ Interactive docs at `http://localhost:8000/docs`.
 - **Qdrant version warnings** → keep `qdrant-client>=1.13,<1.14` (requirements) in sync with the `qdrant/qdrant:v1.13.4` image.
 - **Reset the stack** → `docker compose down -v` (removes DB, Qdrant and document volumes).
 
-## Review
-<img width="1352" height="628" alt="image" src="https://github.com/user-attachments/assets/577c8b22-28eb-44ae-850c-cc2c39f6c79a" />
-<img width="1356" height="284" alt="image" src="https://github.com/user-attachments/assets/09f604aa-f36a-4856-8734-de08f1c25461" />
+
 
