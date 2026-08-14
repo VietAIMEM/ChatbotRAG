@@ -1,6 +1,5 @@
-"use client";
+="use client";
 
-import Link from "next/link";
 import { MessageSquare, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,6 @@ export function ChatSidebar({
   onDelete,
 }: ChatSidebarProps) {
   const { t } = useI18n();
-
   return (
     <aside
       className={cn(
@@ -33,27 +31,19 @@ export function ChatSidebar({
         open ? "translate-x-0" : "-translate-x-full",
       )}
     >
-      {/* New conversation */}
       <div className="border-b p-4">
-        <Button
-          onClick={onNewConversation}
-          className="w-full justify-start gap-2"
-        >
+        <Button onClick={onNewConversation} className="w-full justify-start gap-2">
           <Plus className="h-4 w-4" />
           {t("chat.newConversation")}
         </Button>
       </div>
 
-      {/* Conversations */}
       <div className="flex-1 overflow-y-auto p-2">
         <p className="px-3 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {t("chat.conversations")}
         </p>
-
         {conversations.length === 0 ? (
-          <p className="px-3 py-2 text-sm text-muted-foreground">
-            {t("chat.noConversations")}
-          </p>
+          <p className="px-3 py-2 text-sm text-muted-foreground">{t("chat.noConversations")}</p>
         ) : (
           <div className="space-y-1">
             {conversations.map((conversation) => (
@@ -66,11 +56,7 @@ export function ChatSidebar({
                 onClick={() => onSelect(conversation.session_id)}
               >
                 <MessageSquare className="h-4 w-4 shrink-0 text-muted-foreground" />
-
-                <span className="min-w-0 flex-1 truncate">
-                  {conversation.title}
-                </span>
-
+                <span className="min-w-0 flex-1 truncate">{conversation.title}</span>
                 <button
                   type="button"
                   className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
@@ -86,19 +72,6 @@ export function ChatSidebar({
             ))}
           </div>
         )}
-      </div>
-
-      {/* Admin */}
-      <div className="border-t p-4">
-        <Button
-          asChild
-          variant="outline"
-          className="w-full justify-center"
-        >
-          <Link href="/admin/login">
-            Admin
-          </Link>
-        </Button>
       </div>
     </aside>
   );
