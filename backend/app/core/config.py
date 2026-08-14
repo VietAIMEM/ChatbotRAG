@@ -24,10 +24,9 @@ class Settings(BaseSettings):
     ADMIN_COOKIE_NAME: str = "admin_token"
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgraduate_rag"
-
+    DATABASE_URL: str
     # Qdrant
-    QDRANT_URL: str = "http://localhost:6333"
+    QDRANT_URL: str
     QDRANT_COLLECTION: str = "postgraduate_documents"
     QDRANT_VECTOR_SIZE: int = 768
 
