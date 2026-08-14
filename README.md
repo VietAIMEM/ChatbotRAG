@@ -2,6 +2,8 @@
 
 I am using this project to implement a chatbot for postgraduate studies, but it is customizable; you can adjust the settings to tailor the Q&A functionality to your specific needs.
 
+CI CD
+
 A production-ready **RAG chatbot web application** for postgraduate (Thạc sĩ) information. Visitors chat without logging in and get answers **grounded only in documents uploaded by an administrator** — no free-form hallucination. An admin dashboard manages documents, LLM providers, RAG tuning, conversations, system logs and settings.
 
 Built with **Next.js (App Router) + FastAPI + PostgreSQL + Qdrant**, orchestrated with **Docker Compose**.
