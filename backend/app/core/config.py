@@ -9,7 +9,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     # Application
     APP_NAME: str = "Postgraduate Information Assistant"
@@ -25,6 +29,27 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str
+
+    @property
+    def async_database_url(self) -> str:
+        url = self.DATABASE_URL
+
+        if url.startswith("postgres://"):
+            return url.replace(
+                "postgres://",
+                "postgresql+asyncpg://",
+                1,
+            )
+
+        if url.startswith("postgresql://"):
+            return url.replace(
+                "postgresql://",
+                "postgresql+asyncpg://",
+                1,
+            )
+
+        return url
+
     # Qdrant
     QDRANT_URL: str
     QDRANT_COLLECTION: str = "postgraduate_documents"
@@ -38,7 +63,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     CORS_ALLOW_CREDENTIALS: bool = True
 
-    # Public defaults (overridable from Admin Settings / RAG settings in DB)
+    # Public defaults
     DEFAULT_EMBEDDING_PROVIDER: str = "local"
     DEFAULT_EMBEDDING_MODEL: str = "hash-bge-m3-v1"
     DEFAULT_RERANKER_PROVIDER: str = "local"
@@ -70,7 +95,11 @@ class Settings(BaseSettings):
             try:
                 return json.loads(v)
             except json.JSONDecodeError:
-                return [item.strip() for item in v.split(",") if item.strip()]
+                return [
+                    item.strip()
+                    for item in v.split(",")
+                    if item.strip()
+                ]
         return v
 
     @property
