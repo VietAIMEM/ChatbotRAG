@@ -32,6 +32,7 @@ services:
     restart: unless-stopped
 
   backend:
+    image: ghcr.io/${IMAGE_NAMESPACE:-vietaimem}/chatbotrag-backend:${IMAGE_TAG:-latest}
     build: ./backend
     container_name: chatbot_backend
     depends_on:
@@ -70,6 +71,7 @@ services:
     restart: unless-stopped
 
   frontend:
+    image: ghcr.io/${IMAGE_NAMESPACE:-vietaimem}/chatbotrag-frontend:${IMAGE_TAG:-latest}
     build:
       context: ./frontend
       args:

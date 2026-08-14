@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.env
+.git
+.gitignore
+test_app.db
+*.sqlite3
+tests
+README.md
+Dockerfile
+.dockerignore

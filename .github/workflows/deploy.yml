@@ -1,0 +1,68 @@
+name: Deploy to VPS
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag to deploy (default: latest)'
+        required: false
+        default: 'latest'
+      environment:
+        description: 'Deploy environment'
+        required: false
+        default: 'production'
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy via SSH + docker compose
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          ENV_FILE_B64: ${{ secrets.ENV_FILE }}
+          IMAGE_NAMESPACE: ${{ secrets.IMAGE_NAMESPACE }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        with:
+          host: ${{ env.VPS_HOST }}
+          username: ${{ env.VPS_USER }}
+          key: ${{ env.VPS_SSH_KEY }}
+          port: ${{ env.VPS_PORT }}
+          envs: ENV_FILE_B64,IMAGE_NAMESPACE,IMAGE_TAG
+          script: |
+            set -euo pipefail
+
+            APP_DIR=/opt/chatbotrag
+            mkdir -p $APP_DIR
+            cd $APP_DIR
+
+            echo "==> Syncing repository"
+            if [ ! -d "$APP_DIR/.git" ]; then
+              git clone --depth 1 --branch main https://github.com/VietAIMEM/ChatbotRAG.git $APP_DIR
+            else
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            echo "==> Writing .env"
+            if [ -n "${ENV_FILE_B64:-}" ]; then
+              echo "$ENV_FILE_B64" | base64 -d > $APP_DIR/.env
+              chmod 600 $APP_DIR/.env
+            else
+              echo "ENV_FILE secret not set - keeping existing .env (created from .env.example if missing)."
+              [ -f "$APP_DIR/.env" ] || cp "$APP_DIR/.env.example" "$APP_DIR/.env"
+            fi
+
+            echo "==> Running deploy script"
+            bash $APP_DIR/deploy/deploy.sh
